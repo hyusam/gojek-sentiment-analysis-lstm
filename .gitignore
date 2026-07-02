@@ -14,7 +14,12 @@ data/processed/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
+notebooks/hyperparam_tuning/
 
 # OS
 .DS_Store
 Thumbs.db
+
+# ETC
+videos/
+reports/
