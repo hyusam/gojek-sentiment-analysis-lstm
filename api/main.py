@@ -8,12 +8,15 @@ from src.model import load_sentiment_model, predict_sentiment
 from src.database import init_db, save_prediction, get_all_predictions
 
 # ============================================================
-# Load model & artifacts (sekali saja saat API pertama kali start)
+# Load model & artifacts — path absolut, aman dipanggil dari mana saja
 # ============================================================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODELS_DIR = os.path.join(BASE_DIR, '..', 'models')
+
 model, tokenizer, MAX_LEN = load_sentiment_model(
-    model_path='../models/bilstm_sentiment_model_default.keras',
-    tokenizer_path='../models/tokenizer.pkl',
-    max_len_path='../models/max_len.pkl'
+    model_path=os.path.join(MODELS_DIR, 'bilstm_sentiment_model_default.keras'),
+    tokenizer_path=os.path.join(MODELS_DIR, 'tokenizer.pkl'),
+    max_len_path=os.path.join(MODELS_DIR, 'max_len.pkl')
 )
 
 print(f'✅ Model, tokenizer, dan MAX_LEN ({MAX_LEN}) berhasil dimuat.')
@@ -48,7 +51,6 @@ def root():
 def predict(review: ReviewInput):
     result = predict_sentiment(review.text, model, tokenizer, MAX_LEN)
 
-    # Simpan hasil prediksi ke database
     save_prediction(
         original_text=result["original_text"],
         clean_text=result["clean_text"],
